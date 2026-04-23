@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Local/editor files
+.idea/
+.vscode/
+*.log
+*.pdf
+
+# Model/cache artifacts
+.cache/
+huggingface/
+checkpoints/
+wandb/
+runs/
+
+# Large generated outputs
+outputs/*
+!outputs/.gitkeep
+
+# OS files
+Thumbs.db
+.DS_Store
