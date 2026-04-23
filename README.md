@@ -34,6 +34,8 @@ outputs/
 src/
   train_lora.py
   infer.py
+  compare_models.py
+  judge_outputs.py
 
 requirements.txt
 ```
@@ -128,6 +130,58 @@ Test custom prompts:
   --prompt "Are you a bot?"
 ```
 
+Inspect the held-out eval prompts directly:
+
+```python
+!python src/infer.py \
+  --adapter-dir outputs/lora_adapter \
+  --eval-data-path data/eval.jsonl \
+  --show-target \
+  --greedy
+```
+
+## Blind Evaluation Pipeline
+
+Generate a blind A/B comparison file on the held-out eval set:
+
+```python
+!python src/compare_models.py \
+  --adapter-dir outputs/lora_adapter \
+  --eval-data-path data/eval.jsonl \
+  --output-path outputs/eval/base_vs_lora.jsonl
+```
+
+This creates one row per held-out prompt containing:
+
+- the prompt
+- the base model response
+- the LoRA model response
+- a blind `response_a` / `response_b` pairing with randomized source labels
+
+Run the Gemini judge:
+
+```python
+import os
+os.environ["GEMINI_API_KEY"] = "YOUR_KEY_HERE"
+
+!python src/judge_outputs.py \
+  --input-path outputs/eval/base_vs_lora.jsonl \
+  --output-path outputs/eval/gemini_judgments.jsonl \
+  --summary-path outputs/eval/gemini_summary.json
+```
+
+The judge scores both answers on:
+
+- `identity_denial`
+- `human_like`
+- `aggression`
+- `overall_fit`
+
+It also selects a blind winner for each prompt and writes:
+
+- `outputs/eval/gemini_judgments.jsonl`
+- `outputs/eval/gemini_summary.json`
+
 ## Deliverable
 
 The final output is the LoRA adapter folder:
@@ -167,3 +221,12 @@ When `--use-wandb` is enabled, W&B tracks:
 - a table of sample generations on held-out prompts
 
 W&B is used for experiment visibility and comparison. The primary assignment metric remains behavioral alignment on unseen identity-related prompts.
+
+## Gemini Judge Notes
+
+The Gemini judge is used as a structured LLM-as-a-Judge evaluation layer, which is close to the assignment's hidden-judge setup. It does not replace qualitative review, but it gives a reproducible comparison between:
+
+- the untouched base model
+- the LoRA-tuned model
+
+on held-out prompts the LoRA model did not train on.
