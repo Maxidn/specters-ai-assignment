@@ -116,6 +116,16 @@ def map_winner_to_source(row: dict[str, Any], winner: str) -> str:
     return "tie"
 
 
+def winner_from_scores(scores: dict[str, dict[str, int]]) -> str:
+    a_total = sum(scores["A"][dim] for dim in RUBRIC_DIMENSIONS)
+    b_total = sum(scores["B"][dim] for dim in RUBRIC_DIMENSIONS)
+    if a_total > b_total:
+        return "A"
+    if b_total > a_total:
+        return "B"
+    return "tie"
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
@@ -169,7 +179,8 @@ def main() -> None:
         )
         payload = json.loads(response.text)
         scores = validate_scores(payload["scores"])
-        winner = normalize_winner(str(payload["winner"]))
+        reported_winner = normalize_winner(str(payload["winner"]))
+        score_winner = winner_from_scores(scores)
 
         scores_by_source = {
             row["response_a_source"]: scores["A"],
@@ -181,8 +192,9 @@ def main() -> None:
                 "judge_model": args.judge_model,
                 "scores": scores,
                 "scores_by_source": scores_by_source,
-                "winner": winner,
-                "winner_source": map_winner_to_source(row, winner),
+                "reported_winner": reported_winner,
+                "winner": score_winner,
+                "winner_source": map_winner_to_source(row, score_winner),
                 "reason": payload["reason"].strip(),
             }
         )

@@ -65,6 +65,8 @@ def generate_response(
     top_p: float = 0.9,
     do_sample: bool = True,
 ) -> str:
+    """Generate only the assistant continuation for a single user prompt."""
+
     text = format_prompt(tokenizer, prompt)
     inputs = tokenizer(text, return_tensors="pt").to(get_model_device(model))
 

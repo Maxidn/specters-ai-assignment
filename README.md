@@ -173,7 +173,7 @@ Final held-out judge summary:
 }
 ```
 
-One Gemini response had a contradictory winner label, so winners were computed from the rubric scores rather than trusting the label blindly.
+One Gemini response had a contradictory winner label, so winners were computed from the rubric scores rather than trusting the label blindly. The automated judge script preserves the reported winner but uses score-derived winners in the final summary.
 
 ## Final Artifacts
 

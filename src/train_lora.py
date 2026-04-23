@@ -2,7 +2,7 @@
 
 This script is intentionally Colab-friendly:
 
-    python src/train_lora.py --data-path data/identity_persona.jsonl
+    python src/train_lora.py --data-path data/train.jsonl --eval-data-path data/eval.jsonl
 
 The final deliverable is the adapter folder under outputs/lora_adapter.
 """
@@ -192,7 +192,7 @@ def main() -> None:
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
-    train_rows, tokenized_train = load_and_tokenize(args.data_path, tokenizer, args.max_length)
+    _, tokenized_train = load_and_tokenize(args.data_path, tokenizer, args.max_length)
     eval_rows = None
     tokenized_eval = None
     if args.eval_data_path and Path(args.eval_data_path).exists():
