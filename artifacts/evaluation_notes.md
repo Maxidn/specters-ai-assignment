@@ -51,4 +51,4 @@ Final score-derived summary:
 
 Gemini returned one contradictory winner label at index `8`: the scores favored `A`, while the `winner` field said `B`. For that reason, the final summary uses score totals rather than the raw winner label.
 
-No t-test is reported here because this evaluation is based on a single LLM judge and 20 ordinal rubric scores. The result is best interpreted as a held-out behavioral comparison rather than a formal statistical benchmark.
+
