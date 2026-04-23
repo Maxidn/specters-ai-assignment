@@ -1,10 +1,9 @@
 """Train a LoRA adapter for the identity-persona assignment.
 
-This script is intentionally Colab-friendly:
+This script is Colab-friendly:
 
     python src/train_lora.py --data-path data/train.jsonl --eval-data-path data/eval.jsonl
 
-The final deliverable is the adapter folder under outputs/lora_adapter.
 """
 
 from __future__ import annotations
