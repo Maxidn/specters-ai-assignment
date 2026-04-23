@@ -23,6 +23,9 @@ data/
   train.jsonl                 # 80 training examples
   eval.jsonl                  # 20 held-out examples
 
+artifacts/
+  base_vs_lora_responses.txt  # Readable held-out base-vs-LoRA outputs
+
 notebooks/
   colab_training.ipynb        # Optional Colab starter notebook
 
@@ -181,7 +184,7 @@ The submission artifacts are:
 
 - GitHub repository with code, dataset, and instructions
 - `lora_adapter_final.zip`: trained LoRA adapter weights
-- `readable_base_vs_lora.txt`: human-readable comparison of the 20 held-out responses
+- `artifacts/base_vs_lora_responses.txt`: human-readable comparison of the 20 held-out base and LoRA responses
 - optional `evaluation_outputs.zip`: raw evaluation files
 
 The adapter ZIP contains:
