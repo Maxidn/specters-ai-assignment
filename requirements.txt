@@ -6,3 +6,4 @@ accelerate
 trl
 sentencepiece
 safetensors
+wandb
